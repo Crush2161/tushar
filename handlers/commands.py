@@ -91,24 +91,48 @@ async def play_audio(bot, chat_id, audio_info):
         if not await ensure_assistant_in_chat(bot, chat_id):
             return False
         
-        # Try to join voice chat using PyTgCalls
-        # This handles different API versions gracefully
+        # Try to join voice chat using PyTgCalls with different versions
+        success = False
+        
+        # Method 1: Latest PyTgCalls API version
         try:
-            # Create audio input (newer PyTgCalls versions)
-            audio_stream = InputAudioStream(audio_info['file_path'])
+            logger.info(f"Trying to join voice chat with method 1 (latest API), file: {audio_info['file_path']}")
             
-            # Join and play (newer PyTgCalls versions)
+            # Create audio input (newer PyTgCalls versions)
+            from pytgcalls.types.input_stream import AudioPiped
+            audio_stream = AudioPiped(audio_info['file_path'])
+            
             await bot.call_py.join_group_call(
                 chat_id,
-                audio_stream,
-                stream_type=0  # For audio streams
+                audio_stream
             )
-        except Exception as pytgcalls_error:
-            logger.warning(f"Error with standard PyTgCalls API: {pytgcalls_error}")
-            logger.info("Trying alternative PyTgCalls API format")
-            
-            # Try alternative API format for older versions
+            success = True
+            logger.info("Successfully joined with method 1")
+        except Exception as method1_error:
+            logger.warning(f"Method 1 failed: {method1_error}")
+        
+        # Method 2: Legacy PyTgCalls API with InputAudioStream
+        if not success:
             try:
+                logger.info(f"Trying method 2 (InputAudioStream)")
+                # Older PyTgCalls versions
+                from pytgcalls.types.input_stream import InputAudioStream
+                audio_stream = InputAudioStream(audio_info['file_path'])
+                
+                await bot.call_py.join_group_call(
+                    chat_id,
+                    audio_stream,
+                    stream_type=0
+                )
+                success = True
+                logger.info("Successfully joined with method 2")
+            except Exception as method2_error:
+                logger.warning(f"Method 2 failed: {method2_error}")
+        
+        # Method 3: Oldest PyTgCalls API with dictionary format
+        if not success:
+            try:
+                logger.info(f"Trying method 3 (dictionary format)")
                 await bot.call_py.join_group_call(
                     chat_id,
                     {
@@ -116,9 +140,11 @@ async def play_audio(bot, chat_id, audio_info):
                         'stream_type': 'local'
                     }
                 )
-            except Exception as older_error:
-                logger.error(f"Error with alternative PyTgCalls API: {older_error}")
-                raise older_error
+                success = True
+                logger.info("Successfully joined with method 3")
+            except Exception as method3_error:
+                logger.warning(f"Method 3 failed: {method3_error}")
+                raise method3_error  # Raise the last error if all methods fail
         
         # Update active chat info
         bot.active_chats[chat_id]["is_playing"] = True
