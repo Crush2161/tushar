@@ -2,7 +2,8 @@ import os
 import sys
 import logging
 import asyncio
-from pyrogram import Client, idle
+from pyrogram.client import Client
+from pyrogram.sync import idle
 from pytgcalls import PyTgCalls
 from pyrogram.errors import ApiIdInvalid, ApiIdPublishedFlood, AccessTokenInvalid, AuthKeyUnregistered, PhoneCodeInvalid
 from pyrogram.enums import ParseMode
@@ -112,8 +113,11 @@ class MusicBot:
     async def shutdown(self):
         """Properly shut down the bot and PyTgCalls client"""
         try:
-            if hasattr(self, 'call_py') and self.call_py.is_connected:
-                await self.call_py.stop()
+            if hasattr(self, 'call_py'):
+                try:
+                    await self.call_py.stop()
+                except:
+                    pass
             
             if hasattr(self, 'assistant') and self.assistant.is_connected:
                 await self.assistant.stop()
