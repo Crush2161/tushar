@@ -1,4 +1,4 @@
-
+asyncio
 pyrogram==2.0.106
 py-tgcalls==0.9.7
 tgcrypto==1.2.5
