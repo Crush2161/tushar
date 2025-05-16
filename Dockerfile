@@ -26,7 +26,7 @@ RUN mkdir -p downloads
 # Install Python dependencies
 RUN pip install --upgrade pip && \
     pip install pyrogram tgcrypto yt-dlp ffmpeg-python && \
-    pip install --pre py-tgcalls
+    pip install --pre py-tgcalls==0.9.7
 
 # Copy project files
 COPY . .
