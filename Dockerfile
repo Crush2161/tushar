@@ -2,10 +2,10 @@ FROM python:3.11-slim-bullseye
 
 WORKDIR /app
 
-# Install Node.js
+# Install Node.js (using latest LTS version 18.x)
 RUN apt-get update && \
     apt-get install -y curl gnupg && \
-    curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
+    curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs && \
     npm install -g npm@latest
 
@@ -22,10 +22,13 @@ RUN node --version && npm --version
 # Copy project files
 COPY . .
 
-# Install Python dependencies with specific versions
-RUN pip install --no-cache-dir pyrogram==2.0.106 tgcrypto==1.2.5 yt-dlp==2025.4.30
-# Install py-tgcalls separately with --pre flag to get pre-release versions if needed
-RUN pip install --no-cache-dir --pre py-tgcalls==0.9.7
+# Create downloads directory
+RUN mkdir -p downloads
+
+# Install Python dependencies
+RUN pip install --upgrade pip
+RUN pip install pyrogram tgcrypto yt-dlp
+RUN pip install --no-cache-dir --pre py-tgcalls
 
 # Set environment variable
 ENV IS_HEROKU=true
