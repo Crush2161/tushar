@@ -24,11 +24,11 @@ RUN node --version && npm --version
 RUN mkdir -p downloads
 
 # Copy package files first to leverage Docker cache
-COPY pyproject.toml requirements-heroku.txt ./
+COPY pyproject.toml requirements.txt ./
 
 # Install Python dependencies
 RUN pip install --upgrade pip && \
-    pip install -r requirements-heroku.txt && \
+    pip install -r requirements.txt && \
     pip install --pre py-tgcalls
 
 # Copy project files
