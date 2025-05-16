@@ -6,6 +6,18 @@ from pyrogram.errors import FloodWait
 from pyrogram.types import CallbackQuery, InputMediaPhoto, Message
 
 import config
+
+async def get_queue_info(chat_id, CallbackQuery, _):
+    try:
+        got = db.get(chat_id, [])
+        if not got:
+            return await CallbackQuery.answer(_["queue_2"], show_alert=True)
+        if len(got) == 0:
+            return await CallbackQuery.answer(_["queue_2"], show_alert=True)
+        if len(got) == 1:
+            return await CallbackQuery.answer(_["queue_5"], show_alert=True)
+    except (KeyError, TypeError, AttributeError) as e:
+        return await CallbackQuery.answer(_["queue_2"], show_alert=True)
 from NetflixMusic import app
 from NetflixMusic.misc import db
 from NetflixMusic.utils import NetflixBin, seconds_to_min
