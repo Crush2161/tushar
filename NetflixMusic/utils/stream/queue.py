@@ -18,11 +18,14 @@ async def put_queue(
     stream,
     forceplay: Union[bool, str] = None,
 ):
-    title = title.title()
     try:
-        duration_in_seconds = time_to_seconds(duration) - 3
-    except:
+        title = str(title).title()
         duration_in_seconds = 0
+        if duration and isinstance(duration, str):
+            try:
+                duration_in_seconds = time_to_seconds(duration) - 3
+            except:
+                duration_in_seconds = 0
     put = {
         "title": title,
         "dur": duration,
@@ -35,14 +38,20 @@ async def put_queue(
         "seconds": duration_in_seconds,
         "played": 0,
     }
-    if forceplay:
-        check = db.get(chat_id)
-        if check:
-            check.insert(0, put)
+    try:
+        if forceplay:
+            check = db.get(chat_id, [])
+            if check:
+                check.insert(0, put)
+            else:
+                db[chat_id] = []
+                db[chat_id].append(put)
         else:
-            db[chat_id] = []
+            if chat_id not in db:
+                db[chat_id] = []
             db[chat_id].append(put)
-    else:
+    except (TypeError, KeyError):
+        db[chat_id] = []
         db[chat_id].append(put)
     autoclean.append(file)
 
@@ -58,17 +67,18 @@ async def put_queue_index(
     stream,
     forceplay: Union[bool, str] = None,
 ):
-    if "20.212.146.162" in vidid:
-        try:
+    dur = 0
+    try:
+        if isinstance(vidid, str) and (vidid.startswith("http://") or vidid.startswith("https://")):
             dur = await asyncio.get_event_loop().run_in_executor(
                 None, check_duration, vidid
             )
-            duration = seconds_to_min(dur)
-        except:
-            duration = "ᴜʀʟ sᴛʀᴇᴀᴍ"
-            dur = 0
-    else:
-        dur = 0
+            if dur != "Unknown":
+                duration = seconds_to_min(dur)
+            else:
+                duration = "ᴜʀʟ sᴛʀᴇᴀᴍ"
+    except:
+        duration = "ᴜʀʟ sᴛʀᴇᴀᴍ"
     put = {
         "title": title,
         "dur": duration,
@@ -80,12 +90,18 @@ async def put_queue_index(
         "seconds": dur,
         "played": 0,
     }
-    if forceplay:
-        check = db.get(chat_id)
-        if check:
-            check.insert(0, put)
+    try:
+        if forceplay:
+            check = db.get(chat_id, [])
+            if check:
+                check.insert(0, put)
+            else:
+                db[chat_id] = []
+                db[chat_id].append(put)
         else:
-            db[chat_id] = []
+            if chat_id not in db:
+                db[chat_id] = []
             db[chat_id].append(put)
-    else:
+    except (TypeError, KeyError):
+        db[chat_id] = []
         db[chat_id].append(put)
