@@ -8,7 +8,16 @@ from pyrogram.types import CallbackQuery, InputMediaPhoto, Message
 import config
 from NetflixMusic import app
 from NetflixMusic.misc import db
-from NetflixMusic.utils import NetflixBin, get_channeplayCB, seconds_to_min
+from NetflixMusic.utils import NetflixBin, seconds_to_min
+
+async def get_channeplayCB(_, what, CallbackQuery):
+    if what not in ["c", "g"]:
+        return CallbackQuery.message.chat.id, False
+    elif what == "c":
+        chat_id = CallbackQuery.message.chat.id
+        return chat_id, True
+    elif what == "g":
+        return CallbackQuery.message.chat.id, False
 from NetflixMusic.utils.database import get_cmode, is_active_chat, is_music_playing
 from NetflixMusic.utils.decorators.language import language, languageCB
 from NetflixMusic.utils.inline import queue_back_markup, queue_markup
