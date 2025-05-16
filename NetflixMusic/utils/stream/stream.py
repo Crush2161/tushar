@@ -26,7 +26,6 @@ async def stream(
     original_chat_id,
     video: Union[bool, str] = None,
     streamtype: Union[bool, str] = None,
-    spotify: Union[bool, str] = None,
     forceplay: Union[bool, str] = None,
 ):
     if not result:
@@ -46,7 +45,7 @@ async def stream(
                     duration_sec,
                     thumbnail,
                     vidid,
-                ) = await YouTube.details(search, False if spotify else True)
+                ) = await YouTube.details(search, True)
             except:
                 continue
             if str(duration_min) == "None":
