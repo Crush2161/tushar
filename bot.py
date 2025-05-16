@@ -1,8 +1,8 @@
 import os
+import sys
 import logging
 import asyncio
-from pyrogram.client import Client
-from pyrogram.sync import idle
+from pyrogram import Client, idle
 from pytgcalls import PyTgCalls
 from pyrogram.errors import ApiIdInvalid, ApiIdPublishedFlood, AccessTokenInvalid, AuthKeyUnregistered, PhoneCodeInvalid
 from pyrogram.enums import ParseMode
@@ -10,6 +10,14 @@ from pyrogram.enums import ParseMode
 from config import Config
 from handlers import register_handlers
 
+# Configure detailed logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.StreamHandler(sys.stdout)
+    ]
+)
 logger = logging.getLogger(__name__)
 
 class MusicBot:
