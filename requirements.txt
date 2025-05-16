@@ -20,7 +20,6 @@ python-dotenv
 pyyaml
 requests
 speedtest-cli
-spotipy
 tgcrypto
 unidecode
 uvloop
