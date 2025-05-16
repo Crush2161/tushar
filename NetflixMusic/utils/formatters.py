@@ -117,30 +117,41 @@ def speed_converter(seconds, speed):
 
 
 def check_duration(file_path):
-    command = [
-        "ffprobe",
-        "-loglevel",
-        "quiet",
-        "-print_format",
-        "json",
-        "-show_format",
-        "-show_streams",
-        file_path,
-    ]
+    try:
+        command = [
+            "ffprobe",
+            "-loglevel",
+            "quiet",
+            "-print_format",
+            "json",
+            "-show_format",
+            "-show_streams",
+            file_path,
+        ]
 
-    pipe = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    out, err = pipe.communicate()
-    _json = json.loads(out)
+        pipe = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        out, err = pipe.communicate()
+        if not out:
+            return "Unknown"
+            
+        _json = json.loads(out)
 
-    if "format" in _json:
-        if "duration" in _json["format"]:
-            return float(_json["format"]["duration"])
+        if "format" in _json and "duration" in _json["format"]:
+            try:
+                return float(_json["format"]["duration"])
+            except (ValueError, TypeError):
+                pass
 
-    if "streams" in _json:
-        for s in _json["streams"]:
-            if "duration" in s:
-                return float(s["duration"])
-
+        if "streams" in _json:
+            for s in _json["streams"]:
+                if "duration" in s:
+                    try:
+                        return float(s["duration"])
+                    except (ValueError, TypeError):
+                        continue
+    except:
+        pass
+        
     return "Unknown"
 
 
