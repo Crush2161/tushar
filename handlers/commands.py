@@ -249,7 +249,7 @@ def register_command_handlers(bot):
     """Register command handlers to the Pyrogram client"""
     
     # Stream audio ended handler
-    @bot.call_py.on_closed_voice_chat()
+    @bot.call_py.on_closed()
     async def on_closed_voice_chat(_, chat_id: int):
         await process_next_song(bot, chat_id)
 
