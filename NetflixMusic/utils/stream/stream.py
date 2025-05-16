@@ -136,14 +136,14 @@ async def stream(
         duration_min = result["duration_min"]
         thumbnail = result["thumb"]
         status = True if video else None
-    
-        current_queue = db.get(chat_id)
-
-        
-        if current_queue is not None and len(current_queue) >= 10:
-            return await app.send_message(original_chat_id, "You can't add more than 10 songs to the queue.")
 
         try:
+            # Get current queue
+            current_queue = db.get(chat_id, [])
+            # Check queue length
+            if len(current_queue) >= 10 and not forceplay:
+                return await mystic.edit_text(_["play_12"]) # Queue limit message
+                
             file_path, direct = await YouTube.download(
                 vidid, mystic, videoid=True, video=status
             )
