@@ -18,14 +18,18 @@ async def put_queue(
     stream,
     forceplay: Union[bool, str] = None,
 ):
+    duration_in_seconds = 0
     try:
         title = str(title).title()
-        duration_in_seconds = 0
         if duration and isinstance(duration, str):
             try:
                 duration_in_seconds = time_to_seconds(duration) - 3
             except:
                 duration_in_seconds = 0
+    except:
+        title = str(title)
+        duration_in_seconds = 0
+
     put = {
         "title": title,
         "dur": duration,
@@ -38,6 +42,7 @@ async def put_queue(
         "seconds": duration_in_seconds,
         "played": 0,
     }
+    
     try:
         if forceplay:
             check = db.get(chat_id, [])
