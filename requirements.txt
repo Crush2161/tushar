@@ -1,6 +1,6 @@
 asyncio
 pyrogram==2.0.106
-py-tgcalls==0.9.2
+py-tgcalls==2.1.0
 tgcrypto==1.2.5
 yt-dlp==2025.4.30
 ffmpeg-python==0.2.0
