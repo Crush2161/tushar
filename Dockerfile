@@ -23,12 +23,9 @@ RUN node --version && npm --version
 # Create downloads directory
 RUN mkdir -p downloads
 
-# Copy package files first to leverage Docker cache
-COPY pyproject.toml requirements.txt ./
-
 # Install Python dependencies
 RUN pip install --upgrade pip && \
-    pip install -r requirements.txt && \
+    pip install pyrogram tgcrypto yt-dlp ffmpeg-python && \
     pip install --pre py-tgcalls
 
 # Copy project files
