@@ -5,6 +5,9 @@ from typing import Dict, Any
 from pyrogram import filters
 from pyrogram.types import Message
 from pyrogram.errors import BadRequest, Forbidden, UserNotParticipant
+    from pytgcalls import PyTgCalls, StreamType
+    from pytgcalls.types import Update
+    from pytgcalls.types.updates import StreamEnd
 
 # Handle potential import issues with pytgcalls
 try:
