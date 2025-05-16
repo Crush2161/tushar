@@ -5,12 +5,31 @@ from typing import Dict, Any
 from pyrogram import filters
 from pyrogram.types import Message
 from pyrogram.errors import BadRequest, Forbidden, UserNotParticipant
-from pytgcalls.exceptions import NoActiveGroupCall
-from pytgcalls.types.input_stream import InputAudioStream
-from pytgcalls.types import Update
-from pytgcalls.types.stream import StreamAudioEnded
+
+# Handle potential import issues with pytgcalls
+try:
+    from pytgcalls.exceptions import NoActiveGroupCall
+    from pytgcalls.types.input_stream import InputAudioStream
+    from pytgcalls.types import Update
+    from pytgcalls.types.stream import StreamAudioEnded
+except ImportError:
+    # Define fallback classes if imports fail
+    class NoActiveGroupCall(Exception):
+        pass
+        
+    class InputAudioStream:
+        def __init__(self, path):
+            self.path = path
+            
+    class Update:
+        pass
+        
+    class StreamAudioEnded:
+        def __init__(self, chat_id):
+            self.chat_id = chat_id
 
 from config import Config
+# Use absolute imports for better compatibility with Heroku
 from utils.youtube import download_audio, cleanup_file
 from utils.helpers import create_player_keyboard, get_now_playing_text, get_queue_text
 
@@ -72,17 +91,34 @@ async def play_audio(bot, chat_id, audio_info):
         if not await ensure_assistant_in_chat(bot, chat_id):
             return False
         
-        # Create InputAudioStream
-        audio_stream = InputAudioStream(
-            audio_info['file_path'],
-        )
-        
-        # Join and play
-        await bot.call_py.join_group_call(
-            chat_id,
-            audio_stream,
-            stream_type=0  # For audio streams
-        )
+        # Try to join voice chat using PyTgCalls
+        # This handles different API versions gracefully
+        try:
+            # Create audio input (newer PyTgCalls versions)
+            audio_stream = InputAudioStream(audio_info['file_path'])
+            
+            # Join and play (newer PyTgCalls versions)
+            await bot.call_py.join_group_call(
+                chat_id,
+                audio_stream,
+                stream_type=0  # For audio streams
+            )
+        except Exception as pytgcalls_error:
+            logger.warning(f"Error with standard PyTgCalls API: {pytgcalls_error}")
+            logger.info("Trying alternative PyTgCalls API format")
+            
+            # Try alternative API format for older versions
+            try:
+                await bot.call_py.join_group_call(
+                    chat_id,
+                    {
+                        'path': audio_info['file_path'],
+                        'stream_type': 'local'
+                    }
+                )
+            except Exception as older_error:
+                logger.error(f"Error with alternative PyTgCalls API: {older_error}")
+                raise older_error
         
         # Update active chat info
         bot.active_chats[chat_id]["is_playing"] = True
