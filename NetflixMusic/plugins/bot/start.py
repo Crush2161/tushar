@@ -7,8 +7,7 @@ from youtubesearchpython.__future__ import VideosSearch
 
 import config
 from NetflixMusic import app
-from NetflixMusic.misc import _boot_
-from NetflixMusic.plugins.sudo.sudoers import sudoers_list
+from NetflixMusic.misc import _boot_, SUDOERS
 from NetflixMusic.utils.database import (
     add_served_chat,
     add_served_user,
@@ -40,7 +39,12 @@ async def start_pm(client, message: Message, _):
                 reply_markup=keyboard,
             )
         if name[0:3] == "sud":
-            await sudoers_list(client=client, message=message, _=_)
+            if message.from_user.id in SUDOERS:
+                text = "Current Sudo Users:\n\n"
+                text += f"» {message.from_user.mention} [Authenticated]"
+                await message.reply_text(text)
+            else:
+                await message.reply_text("You are not authorized to view sudo users.")
             if await is_on_off(2):
                 return await app.send_message(
                     chat_id=config.LOG_GROUP_ID,
