@@ -65,12 +65,18 @@ async def get_queue(client, message: Message, _):
         cplay = False
     if not await is_active_chat(chat_id):
         return await message.reply_text(_["general_5"])
-    got = db.get(chat_id)
-    if not got:
+    try:
+        got = db.get(chat_id, [])
+        if not got:
+            return await message.reply_text(_["queue_2"])
+        if len(got) == 0:
+            return await message.reply_text(_["queue_2"])
+            
+        file = got[0]["file"]
+        videoid = got[0]["vidid"]
+        user = got[0]["by"]
+    except (KeyError, IndexError, TypeError):
         return await message.reply_text(_["queue_2"])
-    file = got[0]["file"]
-    videoid = got[0]["vidid"]
-    user = got[0]["by"]
     title = (got[0]["title"]).title()
     typo = (got[0]["streamtype"]).title()
     DUR = get_duration(got)
@@ -156,11 +162,16 @@ async def queued_tracks(client, CallbackQuery: CallbackQuery, _):
         return
     if not await is_active_chat(chat_id):
         return await CallbackQuery.answer(_["general_5"], show_alert=True)
-    got = db.get(chat_id)
-    if not got:
+    try:
+        got = db.get(chat_id, [])
+        if not got:
+            return await CallbackQuery.answer(_["queue_2"], show_alert=True)
+        if len(got) == 0:
+            return await CallbackQuery.answer(_["queue_2"], show_alert=True)
+        if len(got) == 1:
+            return await CallbackQuery.answer(_["queue_5"], show_alert=True)
+    except (KeyError, TypeError):
         return await CallbackQuery.answer(_["queue_2"], show_alert=True)
-    if len(got) == 1:
-        return await CallbackQuery.answer(_["queue_5"], show_alert=True)
     await CallbackQuery.answer()
     basic[videoid] = False
     buttons = queue_back_markup(_, what)
