@@ -4,6 +4,3 @@ py-tgcalls==0.9.7
 tgcrypto==1.2.5
 yt-dlp==2025.4.30
 ffmpeg-python==0.2.0
-flask==3.1.1
-flask-sqlalchemy==3.1.1
-gunicorn==23.0.0
