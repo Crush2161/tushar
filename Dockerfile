@@ -2,12 +2,13 @@ FROM python:3.11-slim-bullseye
 
 WORKDIR /app
 
-# Install Node.js (using latest LTS version 18.x)
+# Install Node.js and npm (compatible versions)
 RUN apt-get update && \
     apt-get install -y curl gnupg && \
-    curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
+    curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
     apt-get install -y nodejs && \
-    npm install -g npm@latest
+    # Don't upgrade npm to avoid compatibility issues
+    npm --version
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -19,16 +20,19 @@ RUN apt-get update && apt-get install -y \
 # Verify Node.js installation
 RUN node --version && npm --version
 
-# Copy project files
-COPY . .
-
 # Create downloads directory
 RUN mkdir -p downloads
 
+# Copy package files first to leverage Docker cache
+COPY pyproject.toml requirements-heroku.txt ./
+
 # Install Python dependencies
-RUN pip install --upgrade pip
-RUN pip install pyrogram tgcrypto yt-dlp
-RUN pip install --no-cache-dir --pre py-tgcalls
+RUN pip install --upgrade pip && \
+    pip install -r requirements-heroku.txt && \
+    pip install --pre py-tgcalls
+
+# Copy project files
+COPY . .
 
 # Set environment variable
 ENV IS_HEROKU=true
