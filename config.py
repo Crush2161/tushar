@@ -16,10 +16,10 @@ BOT_TOKEN = getenv("BOT_TOKEN")
 # Get your mongo url from cloud.mongodb.com
 MONGO_DB_URI = getenv("MONGO_DB_URI", None)
 
-DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 600))
+DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 1800))
 
 # Chat id of a group for logging bot's activities
-LOG_GROUP_ID = int(getenv("LOG_GROUP_ID", -1001801207249))
+LOG_GROUP_ID = int(getenv("LOG_GROUP_ID",-1002398991295))
 
 # Get this value from @MissRose_Bot on Telegram by /id
 OWNER_ID = int(getenv("OWNER_ID", None))
@@ -32,21 +32,21 @@ HEROKU_API_KEY = getenv("HEROKU_API_KEY")
 
 UPSTREAM_REPO = getenv(
     "UPSTREAM_REPO",
-    "https://github.com/Crush2161/Crushbackup",
+    "https://github.com/Crush2161/tushar",
 )
 UPSTREAM_BRANCH = getenv("UPSTREAM_BRANCH", "master")
 GIT_TOKEN = getenv(
     "GIT_TOKEN", None
 )  # Fill this variable if your upstream repository is private
 
-SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/+Pi4Y9k8kGsY4YWM1")
-SUPPORT_GROUP = getenv("SUPPORT_GROUP", "https://t.me/+1O_1VPFF5lw5YTU1")
+SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/Jax18Updates")
+SUPPORT_GROUP = getenv("SUPPORT_GROUP", "https://t.me/Jax18MusicSupport")
 
 # Set this to True if you want the assistant to automatically leave chats after an interval
 AUTO_LEAVING_ASSISTANT = bool(getenv("AUTO_LEAVING_ASSISTANT", False))
 
 # make your bots privacy from telegra.ph and put your url here 
-PRIVACY_LINK = getenv("PRIVACY_LINK", "https://telegra.ph/Privacy-Policy-for-AviaxMusic-08-14")
+PRIVACY_LINK = getenv("PRIVACY_LINK", "https://telegra.ph/Privacy-Policy-for-NetflixMusic-08-14")
 
 
 # Get this credentials from https://developer.spotify.com/dashboard
@@ -81,21 +81,21 @@ confirmer = {}
 
 
 START_IMG_URL = getenv(
-    "START_IMG_URL", "https://envs.sh/LqL.jpg"
+    "START_IMG_URL", "https://graph.org/file/688c555aebbc61ce5fec3-819d98c00c1c499fd6.jpg"
 )
 PING_IMG_URL = getenv(
-    "PING_IMG_URL", "https://envs.sh/LqA.jpg"
+    "PING_IMG_URL", "https://graph.org/file/5bbfe9a740081dc893911-dbdf0671e0dfbb1794.jpg"
 )
-PLAYLIST_IMG_URL = "https://envs.sh/Lq_.jpg"
-STATS_IMG_URL = "https://envs.sh/Lqj.jpg"
-TELEGRAM_AUDIO_URL = "https://envs.sh/Lqc.jpg"
-TELEGRAM_VIDEO_URL = "https://envs.sh/LqL.jpg"
-STREAM_IMG_URL = "https://envs.sh/Lq5.jpg"
-SOUNCLOUD_IMG_URL = "https://envs.sh/Lqz.jpg"
-YOUTUBE_IMG_URL = "https://envs.sh/Lq3.jpg"
-SPOTIFY_ARTIST_IMG_URL = "https://envs.sh/LqY.jpg"
-SPOTIFY_ALBUM_IMG_URL = "https://envs.sh/LqC.jpg"
-SPOTIFY_PLAYLIST_IMG_URL = "https://envs.sh/LqR.jpg"
+PLAYLIST_IMG_URL = "https://graph.org/file/cc7ee6c1fe81e11badecc-5ebcc4dc8431faa4de.jpg"
+STATS_IMG_URL = "https://graph.org/file/688c555aebbc61ce5fec3-819d98c00c1c499fd6.jpg"
+TELEGRAM_AUDIO_URL = "https://graph.org/file/cc7ee6c1fe81e11badecc-5ebcc4dc8431faa4de.jpg"
+TELEGRAM_VIDEO_URL = "https://graph.org/file/5bbfe9a740081dc893911-dbdf0671e0dfbb1794.jpg"
+STREAM_IMG_URL = "https://graph.org/file/688c555aebbc61ce5fec3-819d98c00c1c499fd6.jpg"
+SOUNCLOUD_IMG_URL = "https://graph.org/file/cc7ee6c1fe81e11badecc-5ebcc4dc8431faa4de.jpg"
+YOUTUBE_IMG_URL = "https://graph.org/file/5bbfe9a740081dc893911-dbdf0671e0dfbb1794.jpg"
+SPOTIFY_ARTIST_IMG_URL = "https://graph.org/file/cc7ee6c1fe81e11badecc-5ebcc4dc8431faa4de.jpg"
+SPOTIFY_ALBUM_IMG_URL = "https://graph.org/file/688c555aebbc61ce5fec3-819d98c00c1c499fd6.jpg"
+SPOTIFY_PLAYLIST_IMG_URL = "https://graph.org/file/cc7ee6c1fe81e11badecc-5ebcc4dc8431faa4de.jpg"
 
 
 def time_to_seconds(time):
