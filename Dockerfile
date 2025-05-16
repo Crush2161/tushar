@@ -27,8 +27,7 @@ RUN mkdir -p downloads
 COPY requirements.txt .
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt && \
-    pip install --pre py-tgcalls
-
+    pip install --pre py-tgcalls==0.9.2
 # Copy project files
 COPY . .
 
