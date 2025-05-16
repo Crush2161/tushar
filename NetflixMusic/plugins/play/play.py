@@ -9,7 +9,14 @@ import config
 from NetflixMusic import Apple, Resso, SoundCloud, Telegram, YouTube, app
 from NetflixMusic.core.call import Netflix
 from NetflixMusic.utils import seconds_to_min, time_to_seconds
-from NetflixMusic.utils.channelplay import get_channeplayCB
+async def get_channeplayCB(_, what, CallbackQuery):
+    if what not in ["c", "g"]:
+        return CallbackQuery.message.chat.id, False
+    elif what == "c":
+        chat_id = CallbackQuery.message.chat.id
+        return chat_id, True
+    elif what == "g":
+        return CallbackQuery.message.chat.id, False
 from NetflixMusic.utils.decorators.language import languageCB
 from NetflixMusic.utils.decorators.play import PlayWrapper
 from NetflixMusic.utils.formatters import formats
