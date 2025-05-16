@@ -24,9 +24,10 @@ RUN node --version && npm --version
 RUN mkdir -p downloads
 
 # Install Python dependencies
+COPY requirements.txt .
 RUN pip install --upgrade pip && \
-    pip install pyrogram tgcrypto yt-dlp ffmpeg-python && \
-    pip install --pre py-tgcalls==0.9.7
+    pip install -r requirements.txt && \
+    pip install --pre py-tgcalls
 
 # Copy project files
 COPY . .
